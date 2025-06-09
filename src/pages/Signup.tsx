@@ -19,6 +19,7 @@ const Signup = () => {
   const { vehicleType: globalVehicleType } = useVehicle();
   
   const [formData, setFormData] = useState({
+    username: "",
     fullName: "",
     phone: "",
     email: "",
@@ -44,7 +45,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.fullName || !formData.phone || !formData.password) {
+    if (!formData.username || !formData.fullName || !formData.phone || !formData.password) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -58,9 +59,27 @@ const Signup = () => {
       toast.error("Password must be at least 6 characters");
       return;
     }
+
+    // Save user data and set as logged in
+    localStorage.setItem('userLoggedIn', 'true');
+    localStorage.setItem('userData', JSON.stringify(formData));
     
-    // Redirect to payment page
-    navigate('/payment', { state: { userData: formData } });
+    toast.success("Account created successfully!");
+    
+    // Handle redirect logic
+    const redirectData = location.state;
+    if (redirectData?.redirectTo === '/payment') {
+      navigate('/payment', {
+        state: {
+          selectedPlan: redirectData.selectedPlan,
+          vehicleType: redirectData.vehicleType,
+          userData: formData
+        }
+      });
+    } else {
+      // Redirect to payment page with user data
+      navigate('/payment', { state: { userData: formData } });
+    }
   };
 
   const handleDayToggle = (day: string) => {
@@ -90,6 +109,19 @@ const Signup = () => {
                 {/* Personal Information */}
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold text-dark-gray">Personal Information</h3>
+                  
+                  <div>
+                    <Label htmlFor="username">Username *</Label>
+                    <Input 
+                      id="username"
+                      value={formData.username}
+                      onChange={(e) => setFormData({...formData, username: e.target.value})}
+                      className="mt-2"
+                      placeholder="Choose a unique username"
+                      required
+                    />
+                  </div>
+                  
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="fullName">Full Name *</Label>

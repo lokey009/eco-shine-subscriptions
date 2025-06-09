@@ -16,7 +16,7 @@ const Footer = () => {
               Eco-friendly car & bike washing at your doorstep. Subscribe once, shine always.
             </p>
             <div className="space-y-3">
-              <Link to="/" className="block text-gray-400 hover:text-primary transition-colors">Home</Link>
+              <Link to="/home" className="block text-gray-400 hover:text-primary transition-colors">Home</Link>
               <Link to="/plans" className="block text-gray-400 hover:text-primary transition-colors">Plans</Link>
               <Link to="/about" className="block text-gray-400 hover:text-primary transition-colors">About</Link>
               <Link to="/contact" className="block text-gray-400 hover:text-primary transition-colors">Contact</Link>

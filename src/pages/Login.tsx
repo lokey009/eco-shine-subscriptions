@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,8 +8,11 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 const Login = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -18,8 +21,39 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login
-    console.log("Login attempt:", formData);
+    
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    
+    // Mock login - set user as logged in
+    localStorage.setItem('userLoggedIn', 'true');
+    localStorage.setItem('userData', JSON.stringify({
+      email: formData.email,
+      fullName: "John Doe", // Mock data
+      phone: "+91 9876543210"
+    }));
+    
+    toast.success("Login successful!");
+    
+    // Handle redirect logic
+    const redirectData = location.state;
+    if (redirectData?.redirectTo === '/payment') {
+      navigate('/payment', {
+        state: {
+          selectedPlan: redirectData.selectedPlan,
+          vehicleType: redirectData.vehicleType,
+          userData: {
+            email: formData.email,
+            fullName: "John Doe",
+            phone: "+91 9876543210"
+          }
+        }
+      });
+    } else {
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -84,7 +118,11 @@ const Login = () => {
                 <div className="text-center">
                   <p className="text-gray-600">
                     Don't have an account?{" "}
-                    <Link to="/signup" className="text-primary hover:underline font-medium">
+                    <Link 
+                      to="/signup" 
+                      state={location.state}
+                      className="text-primary hover:underline font-medium"
+                    >
                       Sign up here
                     </Link>
                   </p>

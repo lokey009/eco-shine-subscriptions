@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useVehicle } from "@/contexts/VehicleContext";
@@ -9,9 +9,18 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const Plans = () => {
-  const { vehicleType } = useVehicle();
+  const { vehicleType, setVehicleType } = useVehicle();
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState("");
+  
+  // Mock authentication check - replace with actual auth logic
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in (mock check)
+    const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    setIsLoggedIn(userLoggedIn);
+  }, []);
 
   const carPlans = [
     {
@@ -67,7 +76,26 @@ const Plans = () => {
 
   const handleSelectPlan = (planId: string) => {
     setSelectedPlan(planId);
-    navigate('/signup', { state: { selectedPlan: planId, vehicleType } });
+    
+    if (!isLoggedIn) {
+      // Redirect to login with plan info
+      navigate('/login', { 
+        state: { 
+          redirectTo: '/payment',
+          selectedPlan: planId, 
+          vehicleType 
+        } 
+      });
+    } else {
+      // User is logged in, go directly to payment
+      navigate('/payment', { 
+        state: { 
+          selectedPlan: planId, 
+          vehicleType,
+          userData: JSON.parse(localStorage.getItem('userData') || '{}')
+        } 
+      });
+    }
   };
 
   return (
@@ -83,6 +111,28 @@ const Plans = () => {
             <p className="text-xl text-gray-600 font-light">
               Professional {vehicleType} washing at your doorstep
             </p>
+            
+            {/* Vehicle Type Selector */}
+            <div className="flex justify-center mt-8">
+              <div className="flex items-center space-x-2 bg-white rounded-lg p-2 shadow-md">
+                <Button
+                  variant={vehicleType === 'car' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setVehicleType('car')}
+                  className="h-10 px-6"
+                >
+                  Car Plans
+                </Button>
+                <Button
+                  variant={vehicleType === 'bike' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setVehicleType('bike')}
+                  className="h-10 px-6"
+                >
+                  Bike Plans
+                </Button>
+              </div>
+            </div>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
