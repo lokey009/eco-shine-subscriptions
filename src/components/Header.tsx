@@ -18,7 +18,7 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Sparkles className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold text-dark-gray">ShineWay</span>
+            <span className="text-2xl font-bold text-dark-gray">EcoShine</span>
           </Link>
           
           {/* Vehicle Toggle */}
@@ -46,6 +46,12 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex space-x-8">
+            <Link 
+              to="/dashboard" 
+              className={`transition-colors ${isActive('/dashboard') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
+            >
+              Dashboard
+            </Link>
             <Link 
               to="/plans" 
               className={`transition-colors ${isActive('/plans') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
