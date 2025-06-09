@@ -1,8 +1,9 @@
 
-import { Car, Bike, MapPin, User, Droplets, Users, Building2 } from "lucide-react";
+import { Car, Bike, MapPin, User, Droplets, Users, Building2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useVehicle } from "@/contexts/VehicleContext";
+import Footer from "@/components/Footer";
 
 const Welcome = () => {
   const { vehicleType, setVehicleType } = useVehicle();
@@ -13,10 +14,10 @@ const Welcome = () => {
       <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Droplets className="w-8 h-8 text-primary" />
+            <Link to="/" className="flex items-center space-x-2">
+              <Sparkles className="w-8 h-8 text-primary" />
               <span className="text-2xl font-bold text-dark-gray">EcoShine</span>
-            </div>
+            </Link>
             
             {/* Vehicle Toggle */}
             <div className="flex items-center space-x-4">
@@ -44,13 +45,17 @@ const Welcome = () => {
 
             {/* Navigation Items */}
             <div className="flex items-center space-x-6">
-              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span>Location</span>
+              <Button variant="ghost" size="sm" className="flex items-center space-x-2" asChild>
+                <Link to="/location">
+                  <MapPin className="w-4 h-4" />
+                  <span>Location</span>
+                </Link>
               </Button>
-              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
-                <User className="w-4 h-4" />
-                <span>Profile</span>
+              <Button variant="ghost" size="sm" className="flex items-center space-x-2" asChild>
+                <Link to="/login">
+                  <User className="w-4 h-4" />
+                  <span>Profile</span>
+                </Link>
               </Button>
             </div>
           </div>
@@ -144,22 +149,7 @@ const Welcome = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-dark-gray text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-6">
-            <Droplets className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold">EcoShine</span>
-          </div>
-          <p className="text-gray-400 mb-6">
-            Premium eco-friendly {vehicleType} wash service at your doorstep
-          </p>
-          <div className="flex justify-center space-x-6">
-            <Link to="/about" className="text-gray-400 hover:text-primary transition-colors">About</Link>
-            <Link to="/contact" className="text-gray-400 hover:text-primary transition-colors">Contact</Link>
-            <Link to="/plans" className="text-gray-400 hover:text-primary transition-colors">Pricing</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

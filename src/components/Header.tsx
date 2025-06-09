@@ -1,8 +1,9 @@
 
-import { Sparkles, Car, Bike } from "lucide-react";
+import { Sparkles, Car, Bike, MapPin } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useVehicle } from "@/contexts/VehicleContext";
 import { Button } from "@/components/ui/button";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Header = () => {
   const { vehicleType, setVehicleType } = useVehicle();
@@ -70,12 +71,13 @@ const Header = () => {
             >
               Contact
             </Link>
-            <Link 
-              to="/login" 
-              className={`transition-colors ${isActive('/login') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
-            >
-              Login
-            </Link>
+            <Button variant="ghost" size="sm" className="flex items-center space-x-2" asChild>
+              <Link to="/location">
+                <MapPin className="w-4 h-4" />
+                <span>Location</span>
+              </Link>
+            </Button>
+            <ProfileDropdown />
           </nav>
         </div>
       </div>

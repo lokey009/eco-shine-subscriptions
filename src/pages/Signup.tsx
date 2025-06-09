@@ -1,37 +1,27 @@
 
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Car, Bike } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useVehicle } from "@/contexts/VehicleContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 const Signup = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { vehicleType: globalVehicleType } = useVehicle();
   
   const [formData, setFormData] = useState({
-    username: "",
     fullName: "",
     phone: "",
     email: "",
     password: "",
     confirmPassword: "",
-    vehicleType: location.state?.vehicleType || globalVehicleType,
-    selectedPlan: location.state?.selectedPlan || "",
     locationType: "",
     society: "",
-    address: "",
-    preferredDays: [] as string[],
-    preferredTime: ""
+    address: ""
   });
 
   const communities = [
@@ -45,7 +35,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.username || !formData.fullName || !formData.phone || !formData.password) {
+    if (!formData.fullName || !formData.phone || !formData.password) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -66,29 +56,8 @@ const Signup = () => {
     
     toast.success("Account created successfully!");
     
-    // Handle redirect logic
-    const redirectData = location.state;
-    if (redirectData?.redirectTo === '/payment') {
-      navigate('/payment', {
-        state: {
-          selectedPlan: redirectData.selectedPlan,
-          vehicleType: redirectData.vehicleType,
-          userData: formData
-        }
-      });
-    } else {
-      // Redirect to payment page with user data
-      navigate('/payment', { state: { userData: formData } });
-    }
-  };
-
-  const handleDayToggle = (day: string) => {
-    setFormData(prev => ({
-      ...prev,
-      preferredDays: prev.preferredDays.includes(day)
-        ? prev.preferredDays.filter(d => d !== day)
-        : [...prev.preferredDays, day]
-    }));
+    // Navigate to plans page after successful signup
+    navigate('/plans');
   };
 
   return (
@@ -99,9 +68,9 @@ const Signup = () => {
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="shadow-xl">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-dark-gray">Start Your ShineWay</CardTitle>
+              <CardTitle className="text-3xl font-bold text-dark-gray">Join EcoShine</CardTitle>
               <CardDescription className="text-lg text-gray-600">
-                Complete your {formData.vehicleType} wash subscription
+                Create your account to start your car wash subscription
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -111,40 +80,27 @@ const Signup = () => {
                   <h3 className="text-xl font-semibold text-dark-gray">Personal Information</h3>
                   
                   <div>
-                    <Label htmlFor="username">Username *</Label>
+                    <Label htmlFor="fullName">Full Name *</Label>
                     <Input 
-                      id="username"
-                      value={formData.username}
-                      onChange={(e) => setFormData({...formData, username: e.target.value})}
+                      id="fullName"
+                      value={formData.fullName}
+                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
                       className="mt-2"
-                      placeholder="Choose a unique username"
                       required
                     />
                   </div>
                   
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="fullName">Full Name *</Label>
-                      <Input 
-                        id="fullName"
-                        value={formData.fullName}
-                        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                        className="mt-2"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">Phone Number *</Label>
-                      <Input 
-                        id="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="mt-2"
-                        placeholder="10-digit mobile number"
-                        required
-                      />
-                    </div>
+                  <div>
+                    <Label htmlFor="phone">Phone Number *</Label>
+                    <Input 
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="mt-2"
+                      placeholder="10-digit mobile number"
+                      required
+                    />
                   </div>
                   
                   <div>
@@ -181,17 +137,6 @@ const Signup = () => {
                         className="mt-2"
                         required
                       />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Vehicle Type */}
-                <div>
-                  <Label>Vehicle Type</Label>
-                  <div className="mt-2 p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center space-x-2">
-                      {formData.vehicleType === "car" ? <Car className="w-5 h-5" /> : <Bike className="w-5 h-5" />}
-                      <span className="font-medium capitalize">{formData.vehicleType}</span>
                     </div>
                   </div>
                 </div>
@@ -241,43 +186,8 @@ const Signup = () => {
                   )}
                 </div>
 
-                {/* Schedule Preferences */}
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-dark-gray">Schedule Preferences</h3>
-                  <div>
-                    <Label>Preferred Days</Label>
-                    <div className="grid grid-cols-4 gap-4 mt-2">
-                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                        <div key={day} className="flex items-center space-x-2">
-                          <Checkbox 
-                            id={day} 
-                            checked={formData.preferredDays.includes(day)}
-                            onCheckedChange={() => handleDayToggle(day)}
-                          />
-                          <Label htmlFor={day} className="text-sm">{day}</Label>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label>Preferred Time</Label>
-                    <Select value={formData.preferredTime} onValueChange={(value) => setFormData({...formData, preferredTime: value})}>
-                      <SelectTrigger className="mt-2">
-                        <SelectValue placeholder="Select preferred time" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="7-10">7-10 AM</SelectItem>
-                        <SelectItem value="10-1">10-1 PM</SelectItem>
-                        <SelectItem value="1-4">1-4 PM</SelectItem>
-                        <SelectItem value="4-7">4-7 PM</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
                 <Button type="submit" className="w-full h-12 text-lg font-semibold eco-gradient hover:opacity-90">
-                  Continue to Payment
+                  Create Account
                 </Button>
               </form>
             </CardContent>
