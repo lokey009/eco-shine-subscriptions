@@ -45,51 +45,53 @@ const Payment = () => {
     }
     
     // Simulate payment processing
-    toast.success("Payment successful! Welcome to ShineWay!");
+    toast.success("Payment successful! Welcome to EcoShine!");
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-dark-gray mb-4">Complete Your Subscription</h1>
-            <p className="text-xl text-gray-600">Secure payment powered by Razorpay</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
+              Complete Your Subscription
+            </h1>
+            <p className="text-xl text-gray-300">Secure payment powered by Razorpay</p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Payment Form */}
-            <Card className="shadow-xl">
+            <Card className="shadow-xl premium-card">
               <CardHeader>
-                <CardTitle className="text-2xl font-bold text-dark-gray flex items-center">
-                  <CreditCard className="w-6 h-6 mr-2" />
+                <CardTitle className="text-2xl font-bold text-white flex items-center">
+                  <CreditCard className="w-6 h-6 mr-2 text-cyan-400" />
                   Payment Details
                 </CardTitle>
-                <CardDescription>Enter your card information securely</CardDescription>
+                <CardDescription className="text-gray-300">Enter your card information securely</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <Label htmlFor="cardName">Name on Card</Label>
+                    <Label htmlFor="cardName" className="text-gray-300">Name on Card</Label>
                     <Input 
                       id="cardName"
                       value={paymentData.cardName}
                       onChange={(e) => setPaymentData({...paymentData, cardName: e.target.value})}
-                      className="mt-2"
+                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                       placeholder="John Doe"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="cardNumber">Card Number</Label>
+                    <Label htmlFor="cardNumber" className="text-gray-300">Card Number</Label>
                     <Input 
                       id="cardNumber"
                       value={paymentData.cardNumber}
                       onChange={(e) => setPaymentData({...paymentData, cardNumber: e.target.value})}
-                      className="mt-2"
+                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                       placeholder="1234 5678 9012 3456"
                       maxLength={19}
                       required
@@ -98,36 +100,36 @@ const Payment = () => {
                   
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="expiryMonth">Month</Label>
+                      <Label htmlFor="expiryMonth" className="text-gray-300">Month</Label>
                       <Input 
                         id="expiryMonth"
                         value={paymentData.expiryMonth}
                         onChange={(e) => setPaymentData({...paymentData, expiryMonth: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         placeholder="MM"
                         maxLength={2}
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="expiryYear">Year</Label>
+                      <Label htmlFor="expiryYear" className="text-gray-300">Year</Label>
                       <Input 
                         id="expiryYear"
                         value={paymentData.expiryYear}
                         onChange={(e) => setPaymentData({...paymentData, expiryYear: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         placeholder="YY"
                         maxLength={2}
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="cvv">CVV</Label>
+                      <Label htmlFor="cvv" className="text-gray-300">CVV</Label>
                       <Input 
                         id="cvv"
                         value={paymentData.cvv}
                         onChange={(e) => setPaymentData({...paymentData, cvv: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         placeholder="123"
                         maxLength={3}
                         required
@@ -135,14 +137,14 @@ const Payment = () => {
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2 p-4 bg-green-50 rounded-lg">
-                    <Shield className="w-5 h-5 text-green-600" />
-                    <span className="text-sm text-green-700">
+                  <div className="flex items-center space-x-2 p-4 bg-green-900/20 rounded-lg border border-green-500/30">
+                    <Shield className="w-5 h-5 text-green-400" />
+                    <span className="text-sm text-green-300">
                       Your payment information is encrypted and secure
                     </span>
                   </div>
                   
-                  <Button type="submit" className="w-full h-12 text-lg font-semibold eco-gradient hover:opacity-90">
+                  <Button type="submit" className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
                     Subscribe Now - ₹{total}
                   </Button>
                 </form>
@@ -150,44 +152,44 @@ const Payment = () => {
             </Card>
 
             {/* Order Summary */}
-            <Card className="shadow-xl h-fit">
+            <Card className="shadow-xl premium-card h-fit">
               <CardHeader>
-                <CardTitle className="text-2xl font-bold text-dark-gray">Order Summary</CardTitle>
+                <CardTitle className="text-2xl font-bold text-white">Order Summary</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Vehicle Type:</span>
-                    <span className="font-medium capitalize">{userData?.vehicleType}</span>
+                    <span className="text-gray-400">Vehicle Type:</span>
+                    <span className="font-medium text-white capitalize">{userData?.vehicleType}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Plan:</span>
-                    <span className="font-medium">{userData?.selectedPlan}</span>
+                    <span className="text-gray-400">Plan:</span>
+                    <span className="font-medium text-white">{userData?.selectedPlan}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Monthly Price:</span>
-                    <span className="font-medium">₹{selectedPlanPrice}</span>
+                    <span className="text-gray-400">Monthly Price:</span>
+                    <span className="font-medium text-white">₹{selectedPlanPrice}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">GST (18%):</span>
-                    <span className="font-medium">₹{gst}</span>
+                    <span className="text-gray-400">GST (18%):</span>
+                    <span className="font-medium text-white">₹{gst}</span>
                   </div>
-                  <div className="border-t pt-4">
+                  <div className="border-t border-cyan-500/30 pt-4">
                     <div className="flex justify-between text-lg font-bold">
-                      <span>Total:</span>
-                      <span className="text-primary">₹{total}</span>
+                      <span className="text-white">Total:</span>
+                      <span className="text-cyan-400">₹{total}</span>
                     </div>
                   </div>
                 </div>
 
                 {userData && (
-                  <div className="space-y-4 pt-6 border-t">
-                    <h4 className="font-semibold text-dark-gray">Customer Details</h4>
+                  <div className="space-y-4 pt-6 border-t border-cyan-500/30">
+                    <h4 className="font-semibold text-white">Customer Details</h4>
                     <div className="space-y-2 text-sm">
-                      <p><span className="text-gray-600">Name:</span> {userData.fullName}</p>
-                      <p><span className="text-gray-600">Phone:</span> {userData.phone}</p>
-                      {userData.email && <p><span className="text-gray-600">Email:</span> {userData.email}</p>}
-                      <p><span className="text-gray-600">Preferred Time:</span> {userData.preferredTime}</p>
+                      <p><span className="text-gray-400">Name:</span> <span className="text-white">{userData.fullName}</span></p>
+                      <p><span className="text-gray-400">Phone:</span> <span className="text-white">{userData.phone}</span></p>
+                      {userData.email && <p><span className="text-gray-400">Email:</span> <span className="text-white">{userData.email}</span></p>}
+                      <p><span className="text-gray-400">Preferred Time:</span> <span className="text-white">{userData.preferredTime}</span></p>
                     </div>
                   </div>
                 )}

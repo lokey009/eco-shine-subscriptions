@@ -32,6 +32,35 @@ const Signup = () => {
     "Mantri Alpyne"
   ];
 
+  const validatePassword = (password: string) => {
+    const minLength = 8;
+    const maxLength = 20;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumbers = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (password.length < minLength) {
+      return "Password must be at least 8 characters long";
+    }
+    if (password.length > maxLength) {
+      return "Password must not exceed 20 characters";
+    }
+    if (!hasUpperCase) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!hasLowerCase) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!hasNumbers) {
+      return "Password must contain at least one number";
+    }
+    if (!hasSpecialChar) {
+      return "Password must contain at least one special character";
+    }
+    return null;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -45,8 +74,9 @@ const Signup = () => {
       return;
     }
     
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      toast.error(passwordError);
       return;
     }
 
@@ -124,9 +154,12 @@ const Signup = () => {
                         value={formData.password}
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
                         className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                        placeholder="Min 6 characters"
+                        placeholder="Min 8 chars, 1 upper, 1 lower, 1 number, 1 special"
                         required
                       />
+                      <p className="text-xs text-gray-400 mt-1">
+                        8-20 characters with uppercase, lowercase, number & special character
+                      </p>
                     </div>
                     <div>
                       <Label htmlFor="confirmPassword" className="text-gray-300">Confirm Password *</Label>

@@ -43,6 +43,50 @@ const Header = () => {
             </span>
           </Link>
           
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex space-x-8">
+            <Link 
+              to="/dashboard" 
+              className={`transition-colors ${
+                isActive('/dashboard') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
+            >
+              Dashboard
+            </Link>
+            <Link 
+              to="/plans" 
+              className={`transition-colors ${
+                isActive('/plans') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
+            >
+              Plans
+            </Link>
+            <Link 
+              to="/about" 
+              className={`transition-colors ${
+                isActive('/about') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
+            >
+              About
+            </Link>
+            <Link 
+              to="/contact" 
+              className={`transition-colors ${
+                isActive('/contact') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
+            >
+              Contact
+            </Link>
+          </nav>
+          
           {/* Mobile-optimized controls */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Vehicle Toggle */}
@@ -101,50 +145,6 @@ const Header = () => {
             {/* Profile/Login */}
             <ProfileDropdown />
           </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
-            <Link 
-              to="/dashboard" 
-              className={`transition-colors ${
-                isActive('/dashboard') 
-                  ? 'text-cyan-400 font-medium' 
-                  : 'text-gray-300 hover:text-cyan-400'
-              }`}
-            >
-              Dashboard
-            </Link>
-            <Link 
-              to="/plans" 
-              className={`transition-colors ${
-                isActive('/plans') 
-                  ? 'text-cyan-400 font-medium' 
-                  : 'text-gray-300 hover:text-cyan-400'
-              }`}
-            >
-              Plans
-            </Link>
-            <Link 
-              to="/about" 
-              className={`transition-colors ${
-                isActive('/about') 
-                  ? 'text-cyan-400 font-medium' 
-                  : 'text-gray-300 hover:text-cyan-400'
-              }`}
-            >
-              About
-            </Link>
-            <Link 
-              to="/contact" 
-              className={`transition-colors ${
-                isActive('/contact') 
-                  ? 'text-cyan-400 font-medium' 
-                  : 'text-gray-300 hover:text-cyan-400'
-              }`}
-            >
-              Contact
-            </Link>
-          </nav>
         </div>
       </div>
     </header>
