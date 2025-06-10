@@ -61,15 +61,15 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-xl">
+          <Card className="shadow-xl premium-card">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-dark-gray">Join EcoShine</CardTitle>
-              <CardDescription className="text-lg text-gray-600">
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Join EcoShine</CardTitle>
+              <CardDescription className="text-lg text-gray-300">
                 Create your account to start your car wash subscription
               </CardDescription>
             </CardHeader>
@@ -77,64 +77,64 @@ const Signup = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Information */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-dark-gray">Personal Information</h3>
+                  <h3 className="text-xl font-semibold text-white">Personal Information</h3>
                   
                   <div>
-                    <Label htmlFor="fullName">Full Name *</Label>
+                    <Label htmlFor="fullName" className="text-gray-300">Full Name *</Label>
                     <Input 
                       id="fullName"
                       value={formData.fullName}
                       onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                      className="mt-2"
+                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="phone">Phone Number *</Label>
+                    <Label htmlFor="phone" className="text-gray-300">Phone Number *</Label>
                     <Input 
                       id="phone"
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="mt-2"
+                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                       placeholder="10-digit mobile number"
                       required
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="email">Email (Optional)</Label>
+                    <Label htmlFor="email" className="text-gray-300">Email (Optional)</Label>
                     <Input 
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="mt-2"
+                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                     />
                   </div>
                   
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="password">Password *</Label>
+                      <Label htmlFor="password" className="text-gray-300">Password *</Label>
                       <Input 
                         id="password"
                         type="password"
                         value={formData.password}
                         onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         placeholder="Min 6 characters"
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                      <Label htmlFor="confirmPassword" className="text-gray-300">Confirm Password *</Label>
                       <Input 
                         id="confirmPassword"
                         type="password"
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         required
                       />
                     </div>
@@ -143,14 +143,14 @@ const Signup = () => {
 
                 {/* Location */}
                 <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-dark-gray">Location</h3>
+                  <h3 className="text-xl font-semibold text-white">Location</h3>
                   <div>
-                    <Label>Where do you live?</Label>
+                    <Label className="text-gray-300">Where do you live?</Label>
                     <Select value={formData.locationType} onValueChange={(value) => setFormData({...formData, locationType: value})}>
-                      <SelectTrigger className="mt-2">
+                      <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
                         <SelectValue placeholder="Select your living situation" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-gray-800 border-cyan-500/30">
                         <SelectItem value="gated">Gated Community</SelectItem>
                         <SelectItem value="individual">Individual Apartment</SelectItem>
                       </SelectContent>
@@ -159,12 +159,12 @@ const Signup = () => {
                   
                   {formData.locationType === "gated" && (
                     <div>
-                      <Label>Select your community</Label>
+                      <Label className="text-gray-300">Select your community</Label>
                       <Select value={formData.society} onValueChange={(value) => setFormData({...formData, society: value})}>
-                        <SelectTrigger className="mt-2">
+                        <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
                           <SelectValue placeholder="Choose your community" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-gray-800 border-cyan-500/30">
                           {communities.map(community => (
                             <SelectItem key={community} value={community}>{community}</SelectItem>
                           ))}
@@ -175,10 +175,10 @@ const Signup = () => {
                   
                   {formData.locationType === "individual" && (
                     <div>
-                      <Label>Address</Label>
+                      <Label className="text-gray-300">Address</Label>
                       <Input 
                         placeholder="Enter your address with landmark"
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                         value={formData.address}
                         onChange={(e) => setFormData({...formData, address: e.target.value})}
                       />
@@ -186,7 +186,7 @@ const Signup = () => {
                   )}
                 </div>
 
-                <Button type="submit" className="w-full h-12 text-lg font-semibold eco-gradient hover:opacity-90">
+                <Button type="submit" className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
                   Create Account
                 </Button>
               </form>

@@ -57,41 +57,41 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-xl">
+          <Card className="shadow-xl premium-card">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-dark-gray">Welcome Back</CardTitle>
-              <CardDescription className="text-lg text-gray-600">
-                Sign in to your ShineWay account
+              <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Welcome Back</CardTitle>
+              <CardDescription className="text-lg text-gray-300">
+                Sign in to your EcoShine account
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <Label htmlFor="email">Email or Phone</Label>
+                  <Label htmlFor="email" className="text-gray-300">Email or Phone</Label>
                   <Input 
                     id="email"
                     type="text"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="mt-2"
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                     placeholder="Enter your email or phone number"
                     required
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-gray-300">Password</Label>
                   <Input 
                     id="password"
                     type="password"
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    className="mt-2"
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
                     placeholder="Enter your password"
                     required
                   />
@@ -104,24 +104,24 @@ const Login = () => {
                       checked={formData.rememberMe}
                       onCheckedChange={(checked) => setFormData({...formData, rememberMe: checked as boolean})}
                     />
-                    <Label htmlFor="rememberMe" className="text-sm">Remember me</Label>
+                    <Label htmlFor="rememberMe" className="text-sm text-gray-300">Remember me</Label>
                   </div>
-                  <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                  <Link to="/forgot-password" className="text-sm text-cyan-400 hover:text-cyan-300 hover:underline">
                     Forgot password?
                   </Link>
                 </div>
                 
-                <Button type="submit" className="w-full h-12 text-lg font-semibold eco-gradient hover:opacity-90">
+                <Button type="submit" className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
                   Sign In
                 </Button>
                 
                 <div className="text-center">
-                  <p className="text-gray-600">
+                  <p className="text-gray-400">
                     Don't have an account?{" "}
                     <Link 
                       to="/signup" 
                       state={location.state}
-                      className="text-primary hover:underline font-medium"
+                      className="text-cyan-400 hover:text-cyan-300 hover:underline font-medium"
                     >
                       Sign up here
                     </Link>

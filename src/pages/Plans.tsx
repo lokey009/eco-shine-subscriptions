@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -99,35 +98,43 @@ const Plans = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="text-4xl lg:text-5xl font-bold text-dark-gray mb-4">
+            <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
               {vehicleType === "car" ? "Car Wash" : "Bike Wash"} Plans
             </h1>
-            <p className="text-xl text-gray-600 font-light">
+            <p className="text-xl text-gray-300 font-light">
               Professional {vehicleType} washing at your doorstep
             </p>
             
             {/* Vehicle Type Selector */}
             <div className="flex justify-center mt-8">
-              <div className="flex items-center space-x-2 bg-white rounded-lg p-2 shadow-md">
+              <div className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 border border-cyan-500/30">
                 <Button
-                  variant={vehicleType === 'car' ? 'default' : 'outline'}
+                  variant={vehicleType === 'car' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setVehicleType('car')}
-                  className="h-10 px-6"
+                  className={`h-10 px-6 ${
+                    vehicleType === 'car' 
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+                      : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                  }`}
                 >
                   Car Plans
                 </Button>
                 <Button
-                  variant={vehicleType === 'bike' ? 'default' : 'outline'}
+                  variant={vehicleType === 'bike' ? 'default' : 'ghost'}
                   size="sm"
                   onClick={() => setVehicleType('bike')}
-                  className="h-10 px-6"
+                  className={`h-10 px-6 ${
+                    vehicleType === 'bike' 
+                      ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white' 
+                      : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                  }`}
                 >
                   Bike Plans
                 </Button>
@@ -139,34 +146,34 @@ const Plans = () => {
             {currentPlans.map((plan) => (
               <Card 
                 key={plan.id} 
-                className={`relative transition-all duration-300 hover:shadow-xl ${
-                  plan.highlighted ? 'ring-2 ring-primary scale-105' : ''
+                className={`relative transition-all duration-300 hover:shadow-xl premium-card ${
+                  plan.highlighted ? 'ring-2 ring-cyan-400 scale-105' : ''
                 }`}
               >
                 {plan.highlighted && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold">
+                    <span className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
                       Most Popular
                     </span>
                   </div>
                 )}
                 <CardHeader className="text-center pb-6">
-                  <CardTitle className="text-2xl font-bold text-dark-gray">{plan.name}</CardTitle>
-                  <div className="text-4xl font-bold text-primary mb-2">₹{plan.price}</div>
-                  <CardDescription className="text-lg text-gray-600">{plan.frequency}</CardDescription>
+                  <CardTitle className="text-2xl font-bold text-white">{plan.name}</CardTitle>
+                  <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-2">₹{plan.price}</div>
+                  <CardDescription className="text-lg text-gray-300">{plan.frequency}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {plan.features.map((feature, index) => (
                     <div key={index} className="flex items-center space-x-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <CheckCircle className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                      <span className="text-gray-300">{feature}</span>
                     </div>
                   ))}
                   <Button 
                     className={`w-full mt-8 h-12 font-semibold ${
                       plan.highlighted 
-                        ? 'eco-gradient hover:opacity-90' 
-                        : 'bg-gray-900 hover:bg-gray-800 text-white'
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25' 
+                        : 'bg-gray-800/50 border-cyan-500/30 text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
                     }`}
                     onClick={() => handleSelectPlan(plan.id)}
                   >
