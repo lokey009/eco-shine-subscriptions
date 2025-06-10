@@ -35,7 +35,7 @@ const Signup = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.fullName || !formData.phone || !formData.password) {
+    if (!formData.fullName || !formData.phone || !formData.email || !formData.password) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -70,7 +70,7 @@ const Signup = () => {
             <CardHeader className="text-center">
               <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Join EcoShine</CardTitle>
               <CardDescription className="text-lg text-gray-300">
-                Create your account to start your car wash subscription
+                Create your account to start your car/bike wash subscription
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -104,13 +104,14 @@ const Signup = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="email" className="text-gray-300">Email (Optional)</Label>
+                    <Label htmlFor="email" className="text-gray-300">Email *</Label>
                     <Input 
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({...formData, email: e.target.value})}
                       className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
+                      required
                     />
                   </div>
                   

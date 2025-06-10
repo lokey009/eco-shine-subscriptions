@@ -1,13 +1,29 @@
 
-import { Sparkles, Car, Bike, MapPin } from "lucide-react";
+import { Sparkles, Car, Bike, MapPin, Moon, Sun } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useVehicle } from "@/contexts/VehicleContext";
 import { Button } from "@/components/ui/button";
 import ProfileDropdown from "./ProfileDropdown";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const { vehicleType, setVehicleType } = useVehicle();
   const location = useLocation();
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Apply dark mode by default
+    document.documentElement.classList.add('dark');
+  }, []);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  };
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -27,39 +43,67 @@ const Header = () => {
             </span>
           </Link>
           
-          {/* Vehicle Toggle */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-cyan-500/30">
+          {/* Mobile-optimized controls */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Vehicle Toggle */}
+            <div className="flex items-center space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-cyan-500/30">
               <Button
                 variant={vehicleType === 'car' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setVehicleType('car')}
-                className={`flex items-center space-x-2 h-8 ${
+                className={`flex items-center space-x-1 h-8 px-2 text-xs sm:text-sm ${
                   vehicleType === 'car' 
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
                     : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
                 }`}
               >
-                <Car className="w-4 h-4" />
-                <span>Car</span>
+                <Car className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Car</span>
               </Button>
               <Button
                 variant={vehicleType === 'bike' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setVehicleType('bike')}
-                className={`flex items-center space-x-2 h-8 ${
+                className={`flex items-center space-x-1 h-8 px-2 text-xs sm:text-sm ${
                   vehicleType === 'bike' 
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
                     : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
                 }`}
               >
-                <Bike className="w-4 h-4" />
-                <span>Bike</span>
+                <Bike className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Bike</span>
               </Button>
             </div>
+
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={toggleTheme}
+              className="h-8 w-8 p-0 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+
+            {/* Location Button */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="flex items-center space-x-1 h-8 px-2 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" 
+              asChild
+            >
+              <Link to="/location">
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden md:inline text-xs sm:text-sm">Location</span>
+              </Link>
+            </Button>
+
+            {/* Profile/Login */}
+            <ProfileDropdown />
           </div>
 
-          <nav className="hidden md:flex space-x-8">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex space-x-8 absolute left-1/2 transform -translate-x-1/2">
             <Link 
               to="/dashboard" 
               className={`transition-colors ${
@@ -100,18 +144,6 @@ const Header = () => {
             >
               Contact
             </Link>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" 
-              asChild
-            >
-              <Link to="/location">
-                <MapPin className="w-4 h-4" />
-                <span>Location</span>
-              </Link>
-            </Button>
-            <ProfileDropdown />
           </nav>
         </div>
       </div>
