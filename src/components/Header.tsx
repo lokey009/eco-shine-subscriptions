@@ -14,22 +14,31 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+    <header className="bg-black/95 backdrop-blur-sm border-b border-cyan-500/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <Sparkles className="w-8 h-8 text-primary" />
-            <span className="text-2xl font-bold text-dark-gray">EcoShine</span>
+            <div className="relative">
+              <Sparkles className="w-8 h-8 text-cyan-400 animate-pulse" />
+              <div className="absolute inset-0 w-8 h-8 bg-cyan-400/20 rounded-full blur-md"></div>
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              EcoShine
+            </span>
           </Link>
           
           {/* Vehicle Toggle */}
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-cyan-500/30">
               <Button
                 variant={vehicleType === 'car' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setVehicleType('car')}
-                className="flex items-center space-x-2 h-8"
+                className={`flex items-center space-x-2 h-8 ${
+                  vehicleType === 'car' 
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
+                    : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                }`}
               >
                 <Car className="w-4 h-4" />
                 <span>Car</span>
@@ -38,7 +47,11 @@ const Header = () => {
                 variant={vehicleType === 'bike' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setVehicleType('bike')}
-                className="flex items-center space-x-2 h-8"
+                className={`flex items-center space-x-2 h-8 ${
+                  vehicleType === 'bike' 
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
+                    : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                }`}
               >
                 <Bike className="w-4 h-4" />
                 <span>Bike</span>
@@ -49,29 +62,50 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <Link 
               to="/dashboard" 
-              className={`transition-colors ${isActive('/dashboard') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
+              className={`transition-colors ${
+                isActive('/dashboard') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
             >
               Dashboard
             </Link>
             <Link 
               to="/plans" 
-              className={`transition-colors ${isActive('/plans') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
+              className={`transition-colors ${
+                isActive('/plans') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
             >
               Plans
             </Link>
             <Link 
               to="/about" 
-              className={`transition-colors ${isActive('/about') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
+              className={`transition-colors ${
+                isActive('/about') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
             >
               About
             </Link>
             <Link 
               to="/contact" 
-              className={`transition-colors ${isActive('/contact') ? 'text-primary font-medium' : 'text-dark-gray hover:text-primary'}`}
+              className={`transition-colors ${
+                isActive('/contact') 
+                  ? 'text-cyan-400 font-medium' 
+                  : 'text-gray-300 hover:text-cyan-400'
+              }`}
             >
               Contact
             </Link>
-            <Button variant="ghost" size="sm" className="flex items-center space-x-2" asChild>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" 
+              asChild
+            >
               <Link to="/location">
                 <MapPin className="w-4 h-4" />
                 <span>Location</span>

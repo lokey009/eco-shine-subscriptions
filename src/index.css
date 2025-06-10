@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   :root {
@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 216 6% 20%;
 
-    --primary: 142 45% 42%;
+    --primary: 188 94% 53%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
@@ -25,7 +25,7 @@
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 142 45% 42%;
+    --accent: 188 94% 53%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -33,12 +33,47 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 142 45% 42%;
+    --ring: 188 94% 53%;
 
     --radius: 0.5rem;
 
-    --eco-green: 142 45% 42%;
+    --eco-green: 188 94% 53%;
     --dark-gray: 216 6% 20%;
+
+    /* Neon colors for premium look */
+    --neon-cyan: 188 94% 53%;
+    --neon-blue: 217 91% 60%;
+    --neon-purple: 262 83% 58%;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 188 94% 53%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 188 94% 53%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 188 94% 53%;
   }
 
   * {
@@ -48,6 +83,12 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #000000 0%, #0f172a 50%, #000000 100%);
+    min-height: 100vh;
+  }
+
+  .dark body {
+    background: linear-gradient(135deg, #000000 0%, #0f172a 50%, #000000 100%);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -57,13 +98,89 @@
 
 @layer utilities {
   .eco-gradient {
-    background: linear-gradient(135deg, #3C9A65 0%, #2D7A4F 100%);
+    background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 5px theme('colors.cyan.400'), 0 0 20px theme('colors.cyan.400'), 0 0 35px theme('colors.cyan.400');
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 5px theme('colors.cyan.400'), 0 0 10px theme('colors.cyan.400'), 0 0 15px theme('colors.cyan.400');
   }
   
   .hero-pattern {
     background-image: 
-      radial-gradient(circle at 25px 25px, rgba(60, 154, 101, 0.1) 2px, transparent 2px),
-      radial-gradient(circle at 75px 75px, rgba(60, 154, 101, 0.05) 2px, transparent 2px);
+      radial-gradient(circle at 25px 25px, rgba(6, 182, 212, 0.1) 2px, transparent 2px),
+      radial-gradient(circle at 75px 75px, rgba(59, 130, 246, 0.05) 2px, transparent 2px);
     background-size: 100px 100px;
+  }
+
+  .premium-card {
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .premium-card:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 10px 40px rgba(6, 182, 212, 0.1);
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .neon-border {
+    border: 1px solid;
+    border-image: linear-gradient(45deg, #06b6d4, #3b82f6, #8b5cf6) 1;
+  }
+
+  /* Custom scrollbar for premium look */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #0891b2, #2563eb);
+  }
+
+  /* Animation for premium effects */
+  @keyframes pulse-neon {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .animate-pulse-neon {
+    animation: pulse-neon 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      text-shadow: 0 0 5px theme('colors.cyan.400'), 0 0 10px theme('colors.cyan.400'), 0 0 15px theme('colors.cyan.400');
+    }
+    50% {
+      text-shadow: 0 0 10px theme('colors.cyan.400'), 0 0 20px theme('colors.cyan.400'), 0 0 30px theme('colors.cyan.400');
+    }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
   }
 }
