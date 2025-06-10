@@ -44,7 +44,7 @@ const Header = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex space-x-8">
+          <nav className="hidden md:flex space-x-8">
             <Link 
               to="/dashboard" 
               className={`transition-colors ${
@@ -87,8 +87,8 @@ const Header = () => {
             </Link>
           </nav>
           
-          {/* Mobile-optimized controls */}
-          <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* Mobile and controls */}
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Vehicle Toggle */}
             <div className="flex items-center space-x-1 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-cyan-500/30">
               <Button
@@ -138,7 +138,7 @@ const Header = () => {
             >
               <Link to="/location">
                 <MapPin className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden md:inline text-xs sm:text-sm">Location</span>
+                <span className="hidden lg:inline text-xs sm:text-sm">Location</span>
               </Link>
             </Button>
 
