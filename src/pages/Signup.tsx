@@ -1,71 +1,61 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Eye, EyeOff } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 const Signup = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  
   const [formData, setFormData] = useState({
     fullName: "",
-    phone: "",
     email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
-    locationType: "",
-    society: "",
-    address: ""
+    agreeToTerms: false
   });
-
-  const communities = [
-    "MyHome Avatar",
-    "Aparna Sarovar", 
-    "Brigade Gateway",
-    "Prestige Lakeside Habitat",
-    "Mantri Alpyne"
-  ];
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validatePassword = (password: string) => {
-    const minLength = 8;
-    const maxLength = 20;
+    const minLength = password.length >= 8;
+    const maxLength = password.length <= 20;
     const hasUpperCase = /[A-Z]/.test(password);
     const hasLowerCase = /[a-z]/.test(password);
     const hasNumbers = /\d/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-    if (password.length < minLength) {
-      return "Password must be at least 8 characters long";
-    }
-    if (password.length > maxLength) {
-      return "Password must not exceed 20 characters";
-    }
-    if (!hasUpperCase) {
-      return "Password must contain at least one uppercase letter";
-    }
-    if (!hasLowerCase) {
-      return "Password must contain at least one lowercase letter";
-    }
-    if (!hasNumbers) {
-      return "Password must contain at least one number";
-    }
-    if (!hasSpecialChar) {
-      return "Password must contain at least one special character";
-    }
-    return null;
+    return {
+      minLength,
+      maxLength,
+      hasUpperCase,
+      hasLowerCase,
+      hasNumbers,
+      hasSpecialChar,
+      isValid: minLength && maxLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar
+    };
   };
+
+  const passwordValidation = validatePassword(formData.password);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.fullName || !formData.phone || !formData.email || !formData.password) {
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!passwordValidation.isValid) {
+      toast.error("Password does not meet the requirements");
       return;
     }
     
@@ -74,20 +64,38 @@ const Signup = () => {
       return;
     }
     
-    const passwordError = validatePassword(formData.password);
-    if (passwordError) {
-      toast.error(passwordError);
+    if (!formData.agreeToTerms) {
+      toast.error("Please agree to the terms and conditions");
       return;
     }
-
-    // Save user data and set as logged in
+    
+    // Mock signup - set user as logged in
     localStorage.setItem('userLoggedIn', 'true');
-    localStorage.setItem('userData', JSON.stringify(formData));
+    localStorage.setItem('userData', JSON.stringify({
+      email: formData.email,
+      fullName: formData.fullName,
+      phone: formData.phone
+    }));
     
     toast.success("Account created successfully!");
     
-    // Navigate to plans page after successful signup
-    navigate('/plans');
+    // Handle redirect logic
+    const redirectData = location.state;
+    if (redirectData?.redirectTo === '/payment') {
+      navigate('/payment', {
+        state: {
+          selectedPlan: redirectData.selectedPlan,
+          vehicleType: redirectData.vehicleType,
+          userData: {
+            email: formData.email,
+            fullName: formData.fullName,
+            phone: formData.phone
+          }
+        }
+      });
+    } else {
+      navigate('/home'); // Changed from '/dashboard' to '/home'
+    }
   };
 
   return (
@@ -95,7 +103,7 @@ const Signup = () => {
       <Header />
       
       <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
           <Card className="shadow-xl premium-card">
             <CardHeader className="text-center">
               <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Join EcoShine</CardTitle>
@@ -105,124 +113,159 @@ const Signup = () => {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Personal Information */}
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-white">Personal Information</h3>
-                  
-                  <div>
-                    <Label htmlFor="fullName" className="text-gray-300">Full Name *</Label>
+                <div>
+                  <Label htmlFor="fullName" className="text-gray-300">Full Name *</Label>
+                  <Input 
+                    id="fullName"
+                    type="text"
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="email" className="text-gray-300">Email *</Label>
+                  <Input 
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="phone" className="text-gray-300">Phone Number *</Label>
+                  <Input 
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
+                    placeholder="Enter your phone number"
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="password" className="text-gray-300">Password *</Label>
+                  <div className="relative mt-2">
                     <Input 
-                      id="fullName"
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={formData.password}
+                      onChange={(e) => setFormData({...formData, password: e.target.value})}
+                      className="bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400 pr-10"
+                      placeholder="Create a password"
                       required
                     />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-gray-400" />
+                      )}
+                    </Button>
                   </div>
                   
-                  <div>
-                    <Label htmlFor="phone" className="text-gray-300">Phone Number *</Label>
-                    <Input 
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                      placeholder="10-digit mobile number"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="email" className="text-gray-300">Email *</Label>
-                    <Input 
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
-                      className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="password" className="text-gray-300">Password *</Label>
-                      <Input 
-                        id="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={(e) => setFormData({...formData, password: e.target.value})}
-                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                        placeholder="Min 8 chars, 1 upper, 1 lower, 1 number, 1 special"
-                        required
-                      />
-                      <p className="text-xs text-gray-400 mt-1">
-                        8-20 characters with uppercase, lowercase, number & special character
-                      </p>
+                  {/* Password Requirements */}
+                  <div className="mt-2 space-y-1 text-xs">
+                    <div className={`${passwordValidation.minLength && passwordValidation.maxLength ? 'text-green-400' : 'text-gray-400'}`}>
+                      ✓ 8-20 characters
                     </div>
-                    <div>
-                      <Label htmlFor="confirmPassword" className="text-gray-300">Confirm Password *</Label>
-                      <Input 
-                        id="confirmPassword"
-                        type="password"
-                        value={formData.confirmPassword}
-                        onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                        required
-                      />
+                    <div className={`${passwordValidation.hasUpperCase ? 'text-green-400' : 'text-gray-400'}`}>
+                      ✓ At least one uppercase letter
+                    </div>
+                    <div className={`${passwordValidation.hasLowerCase ? 'text-green-400' : 'text-gray-400'}`}>
+                      ✓ At least one lowercase letter
+                    </div>
+                    <div className={`${passwordValidation.hasNumbers ? 'text-green-400' : 'text-gray-400'}`}>
+                      ✓ At least one number
+                    </div>
+                    <div className={`${passwordValidation.hasSpecialChar ? 'text-green-400' : 'text-gray-400'}`}>
+                      ✓ At least one special character
                     </div>
                   </div>
                 </div>
 
-                {/* Location */}
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold text-white">Location</h3>
-                  <div>
-                    <Label className="text-gray-300">Where do you live?</Label>
-                    <Select value={formData.locationType} onValueChange={(value) => setFormData({...formData, locationType: value})}>
-                      <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
-                        <SelectValue placeholder="Select your living situation" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-800 border-cyan-500/30">
-                        <SelectItem value="gated">Gated Community</SelectItem>
-                        <SelectItem value="individual">Individual Apartment</SelectItem>
-                      </SelectContent>
-                    </Select>
+                <div>
+                  <Label htmlFor="confirmPassword" className="text-gray-300">Confirm Password *</Label>
+                  <div className="relative mt-2">
+                    <Input 
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={formData.confirmPassword}
+                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                      className="bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400 pr-10"
+                      placeholder="Confirm your password"
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <Eye className="h-4 w-4 text-gray-400" />
+                      )}
+                    </Button>
                   </div>
-                  
-                  {formData.locationType === "gated" && (
-                    <div>
-                      <Label className="text-gray-300">Select your community</Label>
-                      <Select value={formData.society} onValueChange={(value) => setFormData({...formData, society: value})}>
-                        <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
-                          <SelectValue placeholder="Choose your community" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-cyan-500/30">
-                          {communities.map(community => (
-                            <SelectItem key={community} value={community}>{community}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                  
-                  {formData.locationType === "individual" && (
-                    <div>
-                      <Label className="text-gray-300">Address</Label>
-                      <Input 
-                        placeholder="Enter your address with landmark"
-                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400 focus:border-cyan-400"
-                        value={formData.address}
-                        onChange={(e) => setFormData({...formData, address: e.target.value})}
-                      />
-                    </div>
-                  )}
                 </div>
-
-                <Button type="submit" className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30">
+                
+                <div className="flex items-start space-x-2">
+                  <Checkbox 
+                    id="agreeToTerms"
+                    checked={formData.agreeToTerms}
+                    onCheckedChange={(checked) => setFormData({...formData, agreeToTerms: checked as boolean})}
+                    className="mt-1"
+                  />
+                  <Label htmlFor="agreeToTerms" className="text-sm text-gray-300 leading-relaxed">
+                    I agree to the{" "}
+                    <Link to="/terms" className="text-cyan-400 hover:text-cyan-300 hover:underline">
+                      Terms and Conditions
+                    </Link>
+                    {" "}and{" "}
+                    <Link to="/privacy" className="text-cyan-400 hover:text-cyan-300 hover:underline">
+                      Privacy Policy
+                    </Link>
+                  </Label>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30"
+                  disabled={!passwordValidation.isValid}
+                >
                   Create Account
                 </Button>
+                
+                <div className="text-center">
+                  <p className="text-gray-400">
+                    Already have an account?{" "}
+                    <Link 
+                      to="/login" 
+                      state={location.state}
+                      className="text-cyan-400 hover:text-cyan-300 hover:underline font-medium"
+                    >
+                      Sign in here
+                    </Link>
+                  </p>
+                </div>
               </form>
             </CardContent>
           </Card>
