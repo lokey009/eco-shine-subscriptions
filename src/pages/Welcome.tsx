@@ -1,12 +1,14 @@
 
-import { Car, Bike, MapPin, User, Droplets, Users, Building2, Sparkles, Star, Shield, Clock } from "lucide-react";
+import { Car, Bike, MapPin, User, Droplets, Users, Building2, Sparkles, Star, Shield, Clock, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useVehicle } from "@/contexts/VehicleContext";
+import { useState } from "react";
 import Footer from "@/components/Footer";
 
 const Welcome = () => {
   const { vehicleType, setVehicleType } = useVehicle();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
@@ -24,8 +26,21 @@ const Welcome = () => {
               </span>
             </Link>
             
-            {/* Vehicle Toggle */}
-            <div className="flex items-center space-x-4">
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-gray-300 hover:text-cyan-400"
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </Button>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-6">
+              {/* Vehicle Toggle */}
               <div className="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-1 border border-cyan-500/30">
                 <Button
                   variant={vehicleType === 'car' ? 'default' : 'ghost'}
@@ -54,28 +69,121 @@ const Welcome = () => {
                   <span>Bike</span>
                 </Button>
               </div>
-            </div>
 
-            {/* Navigation Items */}
-            <div className="flex items-center space-x-6">
-              <Button variant="ghost" size="sm" className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" asChild>
+              {/* Navigation Items */}
+              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" asChild>
                 <Link to="/location">
-                  <MapPin className="w-4 h-4" />
-                  <span>Location</span>
+                  <MapPin className="w-4 h-4 mr-2" />
+                  Location
                 </Link>
+              </Button>
+              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" asChild>
+                <Link to="/plans">Plans</Link>
+              </Button>
+              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" asChild>
+                <Link to="/about">About</Link>
+              </Button>
+              <Button variant="ghost" size="sm" className="text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50" asChild>
+                <Link to="/contact">Contact</Link>
               </Button>
               <Button 
                 size="sm" 
-                className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30" 
+                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30" 
                 asChild
               >
                 <Link to="/login">
-                  <User className="w-4 h-4" />
-                  <span>Login</span>
+                  <User className="w-4 h-4 mr-2" />
+                  Login
                 </Link>
               </Button>
             </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden bg-gray-900/95 backdrop-blur-sm border-t border-cyan-500/20 py-4">
+              <div className="flex flex-col space-y-4">
+                {/* Vehicle Toggle for Mobile */}
+                <div className="flex items-center justify-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-lg p-2 border border-cyan-500/30 mx-4">
+                  <Button
+                    variant={vehicleType === 'car' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setVehicleType('car')}
+                    className={`flex items-center space-x-2 h-10 flex-1 ${
+                      vehicleType === 'car' 
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
+                        : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                    }`}
+                  >
+                    <Car className="w-4 h-4" />
+                    <span>Car</span>
+                  </Button>
+                  <Button
+                    variant={vehicleType === 'bike' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setVehicleType('bike')}
+                    className={`flex items-center space-x-2 h-10 flex-1 ${
+                      vehicleType === 'bike' 
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25' 
+                        : 'text-gray-300 hover:text-cyan-400 hover:bg-gray-700/50'
+                    }`}
+                  >
+                    <Bike className="w-4 h-4" />
+                    <span>Bike</span>
+                  </Button>
+                </div>
+
+                {/* Mobile Navigation Links */}
+                <div className="flex flex-col space-y-2 px-4">
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 h-12" 
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link to="/location">
+                      <MapPin className="w-5 h-5 mr-3" />
+                      Location
+                    </Link>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 h-12" 
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link to="/plans">Plans</Link>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 h-12" 
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link to="/about">About</Link>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="justify-start text-gray-300 hover:text-cyan-400 hover:bg-gray-800/50 h-12" 
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link to="/contact">Contact</Link>
+                  </Button>
+                  <Button 
+                    className="justify-start bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25 border border-cyan-400/30 h-12" 
+                    asChild
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Link to="/login">
+                      <User className="w-5 h-5 mr-3" />
+                      Login
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 

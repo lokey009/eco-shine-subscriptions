@@ -64,37 +64,43 @@ const Location = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gray-50">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,_rgba(6,182,212,0.1)_0%,_transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,_rgba(59,130,246,0.1)_0%,_transparent_50%)]"></div>
+      </div>
+      
+      <section className="relative py-24">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-xl">
+          <Card className="bg-gray-800/30 backdrop-blur-sm border border-cyan-500/20 shadow-xl">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-dark-gray flex items-center justify-center space-x-2">
-                <MapPin className="w-8 h-8 text-primary" />
+              <CardTitle className="text-3xl font-bold text-white flex items-center justify-center space-x-2">
+                <MapPin className="w-8 h-8 text-cyan-400" />
                 <span>Your Location</span>
               </CardTitle>
-              <CardDescription className="text-lg text-gray-600">
+              <CardDescription className="text-lg text-gray-300">
                 Help us serve you better by providing your location details
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Current Location Detection */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-dark-gray">Detect Current Location</h3>
+                <h3 className="text-xl font-semibold text-white">Detect Current Location</h3>
                 <div className="flex items-center space-x-4">
                   <Button 
                     onClick={handleGetCurrentLocation}
-                    className="flex items-center space-x-2 eco-gradient hover:opacity-90"
+                    className="flex items-center space-x-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25"
                   >
                     <Navigation className="w-4 h-4" />
                     <span>Enable GPS Location</span>
                   </Button>
                 </div>
                 {locationData.currentLocation && (
-                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <p className="text-sm text-green-800">
+                  <div className="p-3 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-lg backdrop-blur-sm">
+                    <p className="text-sm text-cyan-200">
                       <strong>Current Location:</strong> {locationData.currentLocation}
                     </p>
                   </div>
@@ -103,17 +109,17 @@ const Location = () => {
 
               {/* Location Type Selection */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-dark-gray">Location Details</h3>
+                <h3 className="text-xl font-semibold text-white">Location Details</h3>
                 
                 <div>
-                  <Label>Where do you live?</Label>
+                  <Label className="text-gray-300">Where do you live?</Label>
                   <Select value={locationData.locationType} onValueChange={(value) => setLocationData({...locationData, locationType: value})}>
-                    <SelectTrigger className="mt-2">
+                    <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
                       <SelectValue placeholder="Select your living situation" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="gated">Gated Community</SelectItem>
-                      <SelectItem value="individual">Individual House/Apartment</SelectItem>
+                    <SelectContent className="bg-gray-800 border-cyan-500/30">
+                      <SelectItem value="gated" className="text-white hover:bg-gray-700">Gated Community</SelectItem>
+                      <SelectItem value="individual" className="text-white hover:bg-gray-700">Individual House/Apartment</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -122,14 +128,14 @@ const Location = () => {
                 {locationData.locationType === "gated" && (
                   <div className="space-y-4">
                     <div>
-                      <Label>Select your gated community</Label>
+                      <Label className="text-gray-300">Select your gated community</Label>
                       <Select value={locationData.gatedCommunity} onValueChange={(value) => setLocationData({...locationData, gatedCommunity: value})}>
-                        <SelectTrigger className="mt-2">
+                        <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
                           <SelectValue placeholder="Choose your community" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="bg-gray-800 border-cyan-500/30">
                           {gatedCommunities.map(community => (
-                            <SelectItem key={community} value={community}>{community}</SelectItem>
+                            <SelectItem key={community} value={community} className="text-white hover:bg-gray-700">{community}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -137,22 +143,22 @@ const Location = () => {
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="flatNumber">Flat/House Number</Label>
+                        <Label htmlFor="flatNumber" className="text-gray-300">Flat/House Number</Label>
                         <Input 
                           id="flatNumber"
                           value={locationData.flatNumber}
                           onChange={(e) => setLocationData({...locationData, flatNumber: e.target.value})}
-                          className="mt-2"
+                          className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
                           placeholder="e.g., A-101, B2-205"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="parkingArea">Parking Area</Label>
+                        <Label htmlFor="parkingArea" className="text-gray-300">Parking Area</Label>
                         <Input 
                           id="parkingArea"
                           value={locationData.parkingArea}
                           onChange={(e) => setLocationData({...locationData, parkingArea: e.target.value})}
-                          className="mt-2"
+                          className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
                           placeholder="e.g., Basement-1, Slot-25"
                         />
                       </div>
@@ -164,12 +170,12 @@ const Location = () => {
                 {locationData.locationType === "individual" && (
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="address">Complete Address</Label>
+                      <Label htmlFor="address" className="text-gray-300">Complete Address</Label>
                       <Input 
                         id="address"
                         value={locationData.address}
                         onChange={(e) => setLocationData({...locationData, address: e.target.value})}
-                        className="mt-2"
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
                         placeholder="Enter your complete address"
                       />
                     </div>
@@ -177,12 +183,12 @@ const Location = () => {
                 )}
 
                 <div>
-                  <Label htmlFor="landmark">Landmark (Optional)</Label>
+                  <Label htmlFor="landmark" className="text-gray-300">Landmark (Optional)</Label>
                   <Input 
                     id="landmark"
                     value={locationData.landmark}
                     onChange={(e) => setLocationData({...locationData, landmark: e.target.value})}
-                    className="mt-2"
+                    className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
                     placeholder="Near metro station, mall, etc."
                   />
                 </div>
@@ -190,7 +196,7 @@ const Location = () => {
 
               <Button 
                 onClick={handleSaveLocation}
-                className="w-full h-12 text-lg font-semibold eco-gradient hover:opacity-90"
+                className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25"
               >
                 Save Location
               </Button>
