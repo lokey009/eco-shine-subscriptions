@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { CreditCard, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 const Payment = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userData = location.state?.userData;
   
   const [paymentData, setPaymentData] = useState({
@@ -44,8 +45,14 @@ const Payment = () => {
       return;
     }
     
+    // Save user plan in localStorage
+    localStorage.setItem('userPlan', userData?.selectedPlan || '');
+    
     // Simulate payment processing
     toast.success("Payment successful! Welcome to EcoShine!");
+    
+    // Navigate to home page after successful payment
+    navigate('/home');
   };
 
   return (

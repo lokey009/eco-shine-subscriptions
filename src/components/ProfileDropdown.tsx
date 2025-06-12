@@ -46,6 +46,7 @@ const ProfileDropdown = () => {
     localStorage.removeItem('userLoggedIn');
     localStorage.removeItem('userData');
     localStorage.removeItem('userLocation');
+    localStorage.removeItem('userPlan');
     setIsLoggedIn(false);
     toast.success("Logged out successfully!");
     window.location.href = '/';

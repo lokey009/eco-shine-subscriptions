@@ -39,7 +39,7 @@ const Login = () => {
     
     toast.success("Login successful!");
     
-    // Handle redirect logic
+    // Handle redirect logic - always go to home page after login
     const redirectData = location.state;
     if (redirectData?.redirectTo === '/payment') {
       navigate('/payment', {
@@ -54,7 +54,7 @@ const Login = () => {
         }
       });
     } else {
-      navigate('/home'); // Changed from '/dashboard' to '/home'
+      navigate('/home'); // Always navigate to home page after login
     }
   };
 
