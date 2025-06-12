@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -79,11 +78,12 @@ const Signup = () => {
     
     toast.success("Account created successfully!");
     
-    // Handle redirect logic
+    // Handle redirect logic - always go to location page first after signup
     const redirectData = location.state;
     if (redirectData?.redirectTo === '/payment') {
-      navigate('/payment', {
+      navigate('/location', {
         state: {
+          redirectTo: '/payment',
           selectedPlan: redirectData.selectedPlan,
           vehicleType: redirectData.vehicleType,
           userData: {
@@ -94,7 +94,7 @@ const Signup = () => {
         }
       });
     } else {
-      navigate('/home'); // Changed from '/dashboard' to '/home'
+      navigate('/location');
     }
   };
 
@@ -102,9 +102,15 @@ const Signup = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,_rgba(6,182,212,0.1)_0%,_transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,_rgba(59,130,246,0.1)_0%,_transparent_50%)]"></div>
+      </div>
+      
+      <section className="relative py-24">
         <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-xl premium-card">
+          <Card className="bg-gray-800/30 backdrop-blur-sm border border-cyan-500/20 shadow-xl">
             <CardHeader className="text-center">
               <CardTitle className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Join EcoShine</CardTitle>
               <CardDescription className="text-lg text-gray-300">

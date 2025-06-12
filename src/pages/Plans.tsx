@@ -11,14 +11,17 @@ const Plans = () => {
   const { vehicleType, setVehicleType } = useVehicle();
   const navigate = useNavigate();
   const [selectedPlan, setSelectedPlan] = useState("");
-  
-  // Mock authentication check - replace with actual auth logic
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [userHasPlan, setUserHasPlan] = useState(false);
+  
   useEffect(() => {
-    // Check if user is logged in (mock check)
+    // Check if user is logged in
     const userLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
     setIsLoggedIn(userLoggedIn);
+    
+    // Check if user already has a plan
+    const existingPlan = localStorage.getItem('userPlan');
+    setUserHasPlan(!!existingPlan);
   }, []);
 
   const carPlans = [
@@ -97,11 +100,21 @@ const Plans = () => {
     }
   };
 
+  const getButtonText = () => {
+    return userHasPlan ? "Update Plan" : "Select Plan";
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
       
-      <section className="py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,_rgba(6,182,212,0.1)_0%,_transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,_rgba(59,130,246,0.1)_0%,_transparent_50%)]"></div>
+      </div>
+      
+      <section className="relative py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-4">
@@ -110,6 +123,14 @@ const Plans = () => {
             <p className="text-xl text-gray-300 font-light">
               Professional {vehicleType} washing at your doorstep
             </p>
+            
+            {userHasPlan && (
+              <div className="mt-4 p-3 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg backdrop-blur-sm max-w-md mx-auto">
+                <p className="text-sm text-green-200">
+                  You currently have an active plan. You can upgrade or change your plan below.
+                </p>
+              </div>
+            )}
             
             {/* Vehicle Type Selector */}
             <div className="flex justify-center mt-8">
@@ -146,7 +167,7 @@ const Plans = () => {
             {currentPlans.map((plan) => (
               <Card 
                 key={plan.id} 
-                className={`relative transition-all duration-300 hover:shadow-xl premium-card ${
+                className={`relative transition-all duration-300 hover:shadow-xl bg-gray-800/30 backdrop-blur-sm border border-cyan-500/20 shadow-xl ${
                   plan.highlighted ? 'ring-2 ring-cyan-400 scale-105' : ''
                 }`}
               >
@@ -177,7 +198,7 @@ const Plans = () => {
                     }`}
                     onClick={() => handleSelectPlan(plan.id)}
                   >
-                    Select Plan
+                    {getButtonText()}
                   </Button>
                 </CardContent>
               </Card>

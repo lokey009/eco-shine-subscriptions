@@ -1,23 +1,31 @@
 
 import { useState } from "react";
-import { MapPin, Navigation, Home } from "lucide-react";
+import { MapPin, Navigation, Car, Bike } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useVehicle } from "@/contexts/VehicleContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 const Location = () => {
+  const { vehicleType, setVehicleType } = useVehicle();
+  const location = useLocation();
+  const navigate = useNavigate();
+  
   const [locationData, setLocationData] = useState({
     currentLocation: "",
     locationType: "",
     gatedCommunity: "",
     address: "",
     flatNumber: "",
-    parkingArea: "",
+    parkingNumber: "",
+    vehicleNumber: "",
     landmark: ""
   });
 
@@ -53,14 +61,42 @@ const Location = () => {
   };
 
   const handleSaveLocation = () => {
-    if (!locationData.locationType) {
-      toast.error("Please select your living situation");
+    if (!locationData.locationType || !vehicleType || !locationData.vehicleNumber) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (locationData.locationType === "gated" && !locationData.gatedCommunity) {
+      toast.error("Please select your gated community");
+      return;
+    }
+
+    if (locationData.locationType === "individual" && !locationData.address) {
+      toast.error("Please enter your complete address");
       return;
     }
 
     // Save location data to localStorage
-    localStorage.setItem('userLocation', JSON.stringify(locationData));
+    const completeLocationData = {
+      ...locationData,
+      vehicleType
+    };
+    localStorage.setItem('userLocation', JSON.stringify(completeLocationData));
     toast.success("Location saved successfully!");
+
+    // Handle navigation based on redirect state
+    const redirectData = location.state;
+    if (redirectData?.redirectTo === '/payment') {
+      navigate('/payment', {
+        state: {
+          selectedPlan: redirectData.selectedPlan,
+          vehicleType: redirectData.vehicleType,
+          userData: redirectData.userData
+        }
+      });
+    } else {
+      navigate('/home');
+    }
   };
 
   return (
@@ -79,10 +115,10 @@ const Location = () => {
             <CardHeader className="text-center">
               <CardTitle className="text-3xl font-bold text-white flex items-center justify-center space-x-2">
                 <MapPin className="w-8 h-8 text-cyan-400" />
-                <span>Your Location</span>
+                <span>Your Location & Vehicle Details</span>
               </CardTitle>
               <CardDescription className="text-lg text-gray-300">
-                Help us serve you better by providing your location details
+                Help us serve you better by providing your details
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -107,9 +143,47 @@ const Location = () => {
                 )}
               </div>
 
+              {/* Vehicle Type Selection */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-white">Vehicle Type *</h3>
+                <ToggleGroup 
+                  type="single" 
+                  value={vehicleType} 
+                  onValueChange={(value) => value && setVehicleType(value as 'car' | 'bike')}
+                  className="justify-start"
+                >
+                  <ToggleGroupItem 
+                    value="car" 
+                    className="flex items-center space-x-2 px-6 py-3 bg-gray-800/50 border-cyan-500/30 text-gray-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-cyan-500 data-[state=on]:to-blue-500 data-[state=on]:text-white"
+                  >
+                    <Car className="w-5 h-5" />
+                    <span>Car</span>
+                  </ToggleGroupItem>
+                  <ToggleGroupItem 
+                    value="bike" 
+                    className="flex items-center space-x-2 px-6 py-3 bg-gray-800/50 border-cyan-500/30 text-gray-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-cyan-500 data-[state=on]:to-blue-500 data-[state=on]:text-white"
+                  >
+                    <Bike className="w-5 h-5" />
+                    <span>Bike</span>
+                  </ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+
+              {/* Vehicle Number */}
+              <div>
+                <Label htmlFor="vehicleNumber" className="text-gray-300">Vehicle Number *</Label>
+                <Input 
+                  id="vehicleNumber"
+                  value={locationData.vehicleNumber}
+                  onChange={(e) => setLocationData({...locationData, vehicleNumber: e.target.value})}
+                  className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
+                  placeholder="e.g., TS09AB1234"
+                />
+              </div>
+
               {/* Location Type Selection */}
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-white">Location Details</h3>
+                <h3 className="text-xl font-semibold text-white">Location Details *</h3>
                 
                 <div>
                   <Label className="text-gray-300">Where do you live?</Label>
@@ -128,7 +202,7 @@ const Location = () => {
                 {locationData.locationType === "gated" && (
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-gray-300">Select your gated community</Label>
+                      <Label className="text-gray-300">Select your gated community *</Label>
                       <Select value={locationData.gatedCommunity} onValueChange={(value) => setLocationData({...locationData, gatedCommunity: value})}>
                         <SelectTrigger className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white">
                           <SelectValue placeholder="Choose your community" />
@@ -153,13 +227,13 @@ const Location = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="parkingArea" className="text-gray-300">Parking Area</Label>
+                        <Label htmlFor="parkingNumber" className="text-gray-300">Parking Number</Label>
                         <Input 
-                          id="parkingArea"
-                          value={locationData.parkingArea}
-                          onChange={(e) => setLocationData({...locationData, parkingArea: e.target.value})}
+                          id="parkingNumber"
+                          value={locationData.parkingNumber}
+                          onChange={(e) => setLocationData({...locationData, parkingNumber: e.target.value})}
                           className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
-                          placeholder="e.g., Basement-1, Slot-25"
+                          placeholder="e.g., P-25, Slot-105"
                         />
                       </div>
                     </div>
@@ -170,13 +244,23 @@ const Location = () => {
                 {locationData.locationType === "individual" && (
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="address" className="text-gray-300">Complete Address</Label>
+                      <Label htmlFor="address" className="text-gray-300">Complete Address *</Label>
                       <Input 
                         id="address"
                         value={locationData.address}
                         onChange={(e) => setLocationData({...locationData, address: e.target.value})}
                         className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
                         placeholder="Enter your complete address"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="parkingNumber" className="text-gray-300">Parking Number</Label>
+                      <Input 
+                        id="parkingNumber"
+                        value={locationData.parkingNumber}
+                        onChange={(e) => setLocationData({...locationData, parkingNumber: e.target.value})}
+                        className="mt-2 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
+                        placeholder="e.g., P-25, Street parking"
                       />
                     </div>
                   </div>
@@ -198,7 +282,7 @@ const Location = () => {
                 onClick={handleSaveLocation}
                 className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg shadow-cyan-500/25"
               >
-                Save Location
+                Save Details & Continue
               </Button>
             </CardContent>
           </Card>

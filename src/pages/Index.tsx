@@ -1,31 +1,12 @@
 
-import { useState } from "react";
-import { ChevronDown, CheckCircle, Calendar, Sparkles, Car, Bike } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useVehicle } from "@/contexts/VehicleContext";
+import { CheckCircle, Calendar, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  const { vehicleType, setVehicleType } = useVehicle();
-  const [selectedLocation, setSelectedLocation] = useState("");
-  const [address, setAddress] = useState("");
-  const [society, setSociety] = useState("");
-
-  const communities = [
-    "MyHome Avatar",
-    "Aparna Sarovar", 
-    "Brigade Gateway",
-    "Prestige Lakeside Habitat",
-    "Mantri Alpyne"
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
       <Header />
@@ -50,71 +31,6 @@ const Index = () => {
             Serving gated societies & individual apartments across Hyderabad
           </p>
           
-          <div className="max-w-md mx-auto mb-8">
-            <Label htmlFor="location" className="block text-lg font-medium text-white mb-4">
-              Where do you live?
-            </Label>
-            <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-              <SelectTrigger className="h-12 text-lg bg-gray-800/50 border-cyan-500/30 text-white">
-                <SelectValue placeholder="Select your living situation" />
-              </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-cyan-500/30">
-                <SelectItem value="gated" className="text-white hover:bg-gray-700">Gated Community</SelectItem>
-                <SelectItem value="individual" className="text-white hover:bg-gray-700">Individual Apartment</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            {selectedLocation === "gated" && (
-              <Select value={society} onValueChange={setSociety}>
-                <SelectTrigger className="h-12 text-lg mt-4 bg-gray-800/50 border-cyan-500/30 text-white">
-                  <SelectValue placeholder="Select your community" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-800 border-cyan-500/30">
-                  {communities.map(community => (
-                    <SelectItem key={community} value={community} className="text-white hover:bg-gray-700">{community}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-            
-            {selectedLocation === "individual" && (
-              <Input 
-                placeholder="Enter your address with landmark"
-                className="h-12 text-lg mt-4 bg-gray-800/50 border-cyan-500/30 text-white placeholder-gray-400"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            )}
-          </div>
-
-          {/* Vehicle Type Selector */}
-          <div className="mb-12">
-            <Label className="block text-lg font-medium text-white mb-4">
-              Choose your vehicle type
-            </Label>
-            <ToggleGroup 
-              type="single" 
-              value={vehicleType} 
-              onValueChange={(value) => value && setVehicleType(value as 'car' | 'bike')}
-              className="justify-center"
-            >
-              <ToggleGroupItem 
-                value="car" 
-                className="flex items-center space-x-2 px-8 py-3 bg-gray-800/50 border-cyan-500/30 text-gray-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-cyan-500 data-[state=on]:to-blue-500 data-[state=on]:text-white"
-              >
-                <Car className="w-5 h-5" />
-                <span>Car</span>
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="bike" 
-                className="flex items-center space-x-2 px-8 py-3 bg-gray-800/50 border-cyan-500/30 text-gray-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-cyan-500 data-[state=on]:to-blue-500 data-[state=on]:text-white"
-              >
-                <Bike className="w-5 h-5" />
-                <span>Bike</span>
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-
           <Link to="/plans">
             <Button 
               size="lg" 
